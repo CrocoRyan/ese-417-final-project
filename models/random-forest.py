@@ -22,9 +22,9 @@ max_features = ['auto', 'sqrt']
 max_depth = [int(x) for x in np.linspace(1, 12, num=11)]
 max_depth.append(None)
 # Minimum number of samples required to split a node
-min_samples_split = [2,5,10,20]
+min_samples_split = [2, 5, 10, 20]
 # Minimum number of samples required at each leaf node
-min_samples_leaf = [1,2,4,8]
+min_samples_leaf = [1, 2, 4, 8]
 # Method of selecting samples for training each tree
 bootstrap = [True, False]
 # Create the random grid
@@ -47,15 +47,14 @@ rf_random.fit(X_train, y_train)
 
 base_model = RandomForestClassifier(n_estimators=10)
 base_model.fit(X_train, y_train)
-mse_base=mean_squared_error(base_model.predict(X_test),y_test)
-print("baseline score :%f"%accuracy_score(y_test,base_model.predict(X_test)))
-
+mse_base = mean_squared_error(base_model.predict(X_test), y_test)
+print("baseline score :%f" % accuracy_score(y_test, base_model.predict(X_test)))
 
 best_random = rf_random.best_estimator_
-mse_best=mean_squared_error(best_random.predict(X_test),y_test)
-print("best mse :%f"%mse_best)
-print("score: %f"%(rf_random.best_estimator_.score(X_test,y_test)))
-print("accuracy_score:%f"%(accuracy_score(y_test,rf_random.best_estimator_.predict(X_test))))
+mse_best = mean_squared_error(best_random.predict(X_test), y_test)
+print("best mse :%f" % mse_best)
+print("score: %f" % (rf_random.best_estimator_.score(X_test, y_test)))
+print("accuracy_score:%f" % (accuracy_score(y_test, rf_random.best_estimator_.predict(X_test))))
 print(rf_random.best_estimator_.predict(X_test))
 print('Improvement of {:0.2f}%.'.format(100 * abs(mse_best - mse_base) / mse_base))
 joblib.dump(rf_random.best_estimator_, 'best_rf_rs.pkl', compress=1)
