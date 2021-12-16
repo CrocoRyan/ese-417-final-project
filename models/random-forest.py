@@ -5,7 +5,7 @@ import numpy as np
 from pprint import pprint
 
 from sklearn.metrics import accuracy_score, f1_score, mean_squared_error
-from sklearn.model_selection import RandomizedSearchCV, train_test_split, GridSearchCV
+from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
 
 from utils.utils import load_data
 
@@ -13,16 +13,9 @@ random_forest = RandomForestRegressor(random_state=42)
 print('Parameters currently in use:\n')
 pprint(random_forest.get_params())
 
-# X_train, X_test, y_train, y_test = load_raw_data()
 filter_list=[5,2,3,8]
-for i in range(4,1,-1):
+for i in range(4,0,-1):
     X_train, X_test, y_train, y_test = load_data(filter_list[:i])
-    le = preprocessing.LabelEncoder()
-    le.fit([3,4,5,6,7,8])
-
-    list(le.classes_)
-    y_test=le.transform(y_test)
-    y_train=le.transform(y_train)
     # Number of trees in random forest
     n_estimators = [int(x) for x in np.linspace(start=200, stop=10000, num=20)]
     # Number of features to consider at every split
@@ -58,7 +51,9 @@ for i in range(4,1,-1):
     base_model.fit(X_train, y_train)
     mse_base = mean_squared_error(base_model.predict(X_test), y_test)
     # print("baseline score :%f" % accuracy_score(y_test, base_model.predict(X_test)))
+    print("*****base line*****")
     print("baseline mse :%f" % mean_squared_error(y_test, base_model.predict(X_test)))
+    print("**********")
 
 
     best_random = rf_random.best_estimator_
@@ -67,8 +62,7 @@ for i in range(4,1,-1):
     test_accuracy_score=rf_random.best_estimator_.score(X_test, y_test)
     print("best accuracy score: %f" % (test_accuracy_score))
     print("accuracy_score on training set:%f" % (accuracy_score(y_train, rf_random.best_estimator_.predict(X_train))))
-    # print(rf_random.best_estimator_.predict(X_test))
-    # print('Improvement of {:0.2f}%.'.format(100 * abs(mse_best - mse_base) / mse_base))
+
     joblib.dump(rf_random.best_estimator_, 'optimal_rf_rs_%d.pkl'%(int(test_accuracy_score*100)), compress=1)
 
 
