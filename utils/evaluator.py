@@ -21,7 +21,7 @@ class Evaluator:
         for model_file in models:
 
             model_result= self.evaluate(os.path.join('..\\models',model_file))
-            model_result['name']=model_file[:model_file.find(".")]
+            model_result['Model Name']=model_file[:model_file.find(".")]
             if not col_names:
                 col_names=list(model_result.keys())
             result_list.append(model_result)
