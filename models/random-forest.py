@@ -65,7 +65,7 @@ for stop_index in range(11):
 
     performance_score_by_filter.append(test_accuracy_score)
 
-    joblib.dump(rf_random.best_estimator_, 'optimal_rf_rs_%d.pkl' % (int(test_accuracy_score * 100)), compress=1)
+    joblib.dump(rf_random.best_estimator_, 'random-forest_%d_%d.pkl' % (int(test_accuracy_score * 100),stop_index), compress=1)
 np.save('performance_score_by_filter.npy',performance_score_by_filter)
 
     # # grid search
