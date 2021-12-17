@@ -2,10 +2,10 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 import os
-import numpy as np
-import pandas as pd
+import matplotlib.pyplot as plt
 import seaborn as sns
-
+sns.set()
+import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 FILTER_COLUMN = (3, 5, 8, 0, 4, 7, 6, 2, 9, 1, 10)
@@ -25,3 +25,28 @@ def load_data(stop_index):
     y_test = np.load('..\\data\\preprocessed\\y_test.npy')
     y_train = np.load('..\\data\\preprocessed\\y_train.npy')
     return X_train, X_test, y_train, y_test
+
+
+def plot_performance_by_filter():
+    results = [i for i in os.listdir('../models') if i.endswith('scores.npy')]
+    base = pd.DataFrame(columns=['performance', 'filter_type'])
+    tmp = ['alcohol', 'density', 'chlorides', 'volatile acidity', 'total sulfur dioxide', 'fixed acidity', 'pH',
+           'residual sugar', 'sulphates', 'citric acid', 'free sulfur dioxide']
+    tmp.reverse()
+    base['filter_type'] = tmp
+    f, ax = plt.subplots(figsize=(11, 9))
+    for result_file in results:
+        performance_data = np.load(os.path.join('../models', result_file))
+        model_name = result_file[:result_file.find('_')]
+        base[model_name] = performance_data
+        sns.lineplot(x='filter_type', y=model_name, data=base, legend='brief', label=model_name).set(
+            title='performance by filter')
+
+    plt.xticks(rotation=45)
+    f.savefig('performance_by_filtering.jpg', dpi=100, bbox_inches='tight')
+
+    plt.show()
+
+
+if __name__ == '__main__':
+    plot_performance_by_filter()
