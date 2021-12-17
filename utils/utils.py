@@ -15,7 +15,6 @@ FILTER_COLUMN = (3, 5, 8, 0, 4, 7, 6, 2, 9, 1, 10)
 def load_data(stop_index):
     # load samples
     # pca = PCA(n_components=3)
-
     X_test = np.load('..\\data\\preprocessed\\X_test.npy')
     X_train = np.load('..\\data\\preprocessed\\X_train.npy')
     # for potential pca usage
