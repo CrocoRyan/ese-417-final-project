@@ -13,6 +13,7 @@ random_forest = RandomForestRegressor(random_state=42)
 print('Parameters currently in use:\n')
 pprint(random_forest.get_params())
 
+performance_score_by_filter=[]
 for stop_index in range(11):
     X_train, X_test, y_train, y_test = load_data(stop_index)
     # Number of trees in random forest
@@ -23,9 +24,9 @@ for stop_index in range(11):
     max_depth = [int(x) for x in np.linspace(1, 12, num=11)]
     max_depth.append(None)
     # Minimum number of samples required to split a node
-    min_samples_split = [0.1,0.2,0.3,0.5,0.7]
+    min_samples_split = [0.1, 0.2, 0.3, 0.5, 0.7]
     # Minimum number of samples required at each leaf node
-    min_samples_leaf = [50,75,150]
+    min_samples_leaf = [50, 75, 150]
     # Method of selecting samples for training each tree
     bootstrap = [True, False]
     # Create the random grid
@@ -40,7 +41,8 @@ for stop_index in range(11):
     pprint(random_grid)
 
     random_forest = RandomForestClassifier()
-    rf_random = RandomizedSearchCV(estimator=random_forest, param_distributions=random_grid, n_iter=100, cv=3, verbose=2,
+    rf_random = RandomizedSearchCV(estimator=random_forest, param_distributions=random_grid, n_iter=100, cv=3,
+                                   verbose=2,
                                    random_state=42, n_jobs=-1)
     # Fit the random search model
 
@@ -54,16 +56,17 @@ for stop_index in range(11):
     print("baseline mse :%f" % mean_squared_error(y_test, base_model.predict(X_test)))
     print("**********")
 
-
     best_random = rf_random.best_estimator_
     mse_best = mean_squared_error(best_random.predict(X_test), y_test)
     print("best mse :%f" % mse_best)
-    test_accuracy_score=rf_random.best_estimator_.score(X_test, y_test)
+    test_accuracy_score = rf_random.best_estimator_.score(X_test, y_test)
     print("best accuracy score: %f" % (test_accuracy_score))
     print("accuracy_score on training set:%f" % (accuracy_score(y_train, rf_random.best_estimator_.predict(X_train))))
 
-    joblib.dump(rf_random.best_estimator_, 'optimal_rf_rs_%d.pkl'%(int(test_accuracy_score*100)), compress=1)
+    performance_score_by_filter.append(test_accuracy_score)
 
+    joblib.dump(rf_random.best_estimator_, 'optimal_rf_rs_%d.pkl' % (int(test_accuracy_score * 100)), compress=1)
+np.save('performance_score_by_filter.npy',performance_score_by_filter)
 
     # # grid search
     # param_grid = {"max_depth": max_depth,
