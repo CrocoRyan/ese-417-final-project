@@ -1,9 +1,9 @@
 import numpy as np
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
+
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 sns.set()
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -28,7 +28,7 @@ def load_data(stop_index):
 
 
 def plot_performance_by_filter():
-    results = [i for i in os.listdir('../models') if i.endswith('scores.npy')]
+    results = [i for i in os.listdir('../models') if i.endswith('score.npy')]
     base = pd.DataFrame(columns=['performance', 'filter_type'])
     tmp = ['alcohol', 'density', 'chlorides', 'volatile acidity', 'total sulfur dioxide', 'fixed acidity', 'pH',
            'residual sugar', 'sulphates', 'citric acid', 'free sulfur dioxide']
@@ -40,9 +40,11 @@ def plot_performance_by_filter():
         model_name = result_file[:result_file.find('_')]
         base[model_name] = performance_data
         sns.lineplot(x='filter_type', y=model_name, data=base, legend='brief', label=model_name).set(
-            title='performance by filter')
-
+            title='performance by filter selections')
+    plt.xlabel('filter_type (accumulative) ---→')
     plt.xticks(rotation=45)
+    plt.ylabel('accuracy')
+
     f.savefig('performance_by_filtering.jpg', dpi=100, bbox_inches='tight')
 
     plt.show()
