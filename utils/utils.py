@@ -37,7 +37,7 @@ def plot_performance_by_filter():
     f, ax = plt.subplots(figsize=(11, 9))
     for result_file in results:
         performance_data = np.load(os.path.join('../models', result_file))
-        model_name = result_file[:result_file.find('_')]
+        model_name = result_file[:result_file.find('_')].upper()
         base[model_name] = performance_data
         sns.lineplot(x='filter_type', y=model_name, data=base, legend='brief', label=model_name).set(
             title='performance by filter selections')
