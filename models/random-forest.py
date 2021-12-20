@@ -25,7 +25,7 @@ for stop_index in range(11):
     # base_model.fit(X_train, y_train)
     # mse_base = mean_squared_error(base_model.predict(X_test), y_test)
     # print("*****base line*****")
-    # print("base model accu %d" % base_model.score(X_test, y_test))
+    # print("base model accu %f" % base_model.score(X_test, y_test))
     # print("**********")
     # joblib.dump(base_model, './backup/random-forest_%d.pkl' % (stop_index), compress=1)
     #
@@ -72,6 +72,6 @@ for stop_index in range(11):
         print("accuracy_score on training set:%f" % (test_accuracy_score))
 
 
-# # dump feature selection result
+# dump feature selection result
 # np.save('backup/random-forest_performance_score.npy', performance_score_by_filter)
 
