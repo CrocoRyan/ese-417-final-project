@@ -30,8 +30,8 @@ def load_data(stop_index):
 def plot_performance_by_filter():
     results = [i for i in os.listdir('../models') if i.endswith('score.npy')]
     base = pd.DataFrame(columns=['performance', 'filter_type'])
-    tmp = ['alcohol', 'density', 'chlorides', 'volatile acidity', 'total sulfur dioxide', 'fixed acidity', 'pH',
-           'residual sugar', 'sulphates', 'citric acid', 'free sulfur dioxide']
+    tmp = ['density', 'chlorides', 'volatile acidity', 'total sulfur dioxide', 'fixed acidity', 'pH',
+           'residual sugar', 'sulphates', 'citric acid', 'free sulfur dioxide','no filter']
     tmp.reverse()
     base['filter_type'] = tmp
     f, ax = plt.subplots(figsize=(11, 9))
