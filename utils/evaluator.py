@@ -3,6 +3,7 @@ import numpy as np
 
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 from sklearn.metrics import f1_score
+from sklearn.metrics import classification_report
 import os
 import csv
 
@@ -22,23 +23,20 @@ class Evaluator:
         result_list=[]
         col_names=[]
         for model_file in models:
-
+            print('Model Name: %s'%(model_file.split("_")[0]))
             model_result= self.evaluate(os.path.join('..\\models',model_file),int(model_file.split(".")[-2].split("_")[-1]))
-            model_result['Model Name']=model_file.split("_")[0]
-            if not col_names:
-                col_names=list(model_result.keys())
-            result_list.append(model_result)
-        self.cache,self.col_names=result_list,col_names
+        #     model_result['Model Name']=model_file.split("_")[0]
+        #     if not col_names:
+        #         col_names=list(model_result.keys())
+        #     result_list.append(model_result)
+        # self.cache,self.col_names=result_list,col_names
 
     def evaluate(self,model_path,stop_index):
         clf = joblib.load(model_path)
         _,self.test_data_set,_,self.target_values=load_data(stop_index)
-        accuracy=accuracy_score(clf.predict(self.test_data_set),self.target_values)
-        f1=f1_score(clf.predict(self.test_data_set),self.target_values)
-        precision=precision_score(clf.predict(self.test_data_set),self.target_values)
-        recall=recall_score(clf.predict(self.test_data_set),self.target_values)
-        print(clf.__dict__ )
-        return {'Accuracy':accuracy,'F1 score':f1,'Precision':precision,'Recall':recall}
+        pred=clf.predict(self.test_data_set)
+        print(classification_report(self.target_values, pred, target_names=['-1','0','1']))
+
     def output_csv(self):
         csv_file = "Evaluation.csv"
         try:
@@ -53,9 +51,8 @@ class Evaluator:
 
 if __name__ == '__main__':
     my_evaluator=Evaluator()
-    # print(my_evaluator.evaluate('C:\\Users\\ryan_\\PycharmProjects\\ese-417-final-project\\models\\backup\\random-forest_0.pkl',0))
+    # print(my_evaluator.evaluate('C:\\Users\\ryan_\\PycharmProjects\\ese-417-final-project\\models\\backup\\random-forest_1.pkl',1))
     my_evaluator.scan_models()
-    my_evaluator.output_csv()
 
 
 
